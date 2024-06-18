@@ -9,7 +9,7 @@ public class User {
     private String username;
     private String password;
 
-    public Collection<extends GrantedAuthority> getAuthorities() {
+    public Collection<GrantedAuthority> getAuthorities() {
         return null;
     }
 }
