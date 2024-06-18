@@ -1,4 +1,4 @@
-package com.rockercats.open_api.model.product;
+package com.rockercats.open_api.dto.product;
 
 import lombok.Getter;
 import lombok.Setter;

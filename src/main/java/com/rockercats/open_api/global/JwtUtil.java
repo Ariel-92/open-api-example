@@ -1,6 +1,6 @@
 package com.rockercats.open_api.global;
 
-import com.rockercats.open_api.model.User;
+import com.rockercats.open_api.dto.user.User;
 import org.springframework.stereotype.Component;
 
 @Component
