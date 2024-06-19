@@ -1,7 +1,7 @@
 package com.rockercats.open_api.global;
 
 import com.rockercats.open_api.dto.user.User;
-import com.rockercats.open_api.service.auth.UserService;
+import com.rockercats.open_api.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
