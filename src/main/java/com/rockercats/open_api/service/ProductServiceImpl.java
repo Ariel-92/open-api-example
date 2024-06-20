@@ -14,12 +14,9 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     private final OpenApiExamProductMapper openApiExamProductMapper;
 
-//    public List<ProductDetailResponse> getProducts(ProductDetailRequest productDetailRequest) {
-//        return openApiExamProductMapper.selectProductList(productDetailRequest);
-//    }
-
     @Override
     public List<ProductDetailResponse> getProducts() {
-        return openApiExamProductMapper.selectProductList();
+        List<ProductDetailResponse> productDetailResponse = openApiExamProductMapper.selectProductList();
+        return productDetailResponse;
     }
 }
