@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rockercats.open_api.repository.OpenApiExamApiKeysMapper">
+    <select id="getApiKeys" resultType="com.rockercats.open_api.entity.ApiKeys" parameterType="String">
+        SELECT API_UUID, API_PATH, USER_ID, EXPIRED_TIME
+        FROM API_KEYS
+        WHERE API_UUID
+    </select>
+
+    <insert id="addApiKey" parameterType="apiKeys">
+        INSERT INTO API_KEYS(API_UUID, API_PATH, USER_ID, EXPIRED_TIME)
+        VALUES
+        (
+            #{apiUuid},
+            #{apiPath},
+            #{userId},
+            #{expiredTime}
+        )
+    </insert>
+</mapper>
