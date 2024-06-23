@@ -4,6 +4,7 @@ import com.rockercats.open_api.service.security.ApiJwtAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -22,7 +23,17 @@ public class GreetingController {
     }
 
     @GetMapping("/public/getKey")
-    public ResponseEntity<String> getPublicKey() {
-        return ResponseEntity.ok(authService.generateApiKey("/public/getKey"));
+    public ResponseEntity<String> getPublicKey(@RequestParam String apiPath) {
+        return ResponseEntity.ok(authService.generateApiKey(apiPath));
+    }
+
+    @GetMapping("/protected/keyTest")
+    public ResponseEntity<String> getKeyTest() {
+        return ResponseEntity.ok("Key Test Successfully!");
+    }
+
+    @GetMapping("/protected/errorTest")
+    public ResponseEntity<String> getErrorTest() {
+        return ResponseEntity.ok("Error Test Successfully!");
     }
 }

@@ -34,8 +34,8 @@ public class ApiJwtAuthService {
         this.secretKey = new SecretKeySpec(Base64.getEncoder().encode(accessSecretKey.getBytes()), "HmacSHA256");
     }
 
-    public ApiKeys getApiKeyInfo(String token) {
-        return null;
+    public ApiKeys getApiKeyInfo(String uuid) {
+        return apiKeysMapper.getApiKeys(uuid);
     }
 
     public String generateApiKey(String apiPath) {
