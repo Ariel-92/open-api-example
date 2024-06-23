@@ -16,6 +16,8 @@ public class ApiKeyAuthExtractor {
 
     public Optional<Authentication> extract(HttpServletRequest request) {
         String providedKey = request.getHeader("ApiKey");
+        String uri = request.getRequestURI();
+
         if(providedKey == null || !providedKey.equals(apiKey)) {
             return Optional.empty();
         }

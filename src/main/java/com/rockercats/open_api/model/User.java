@@ -1,13 +1,18 @@
 package com.rockercats.open_api.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
+@Getter
+@Setter
 public class User {
-    private Long id;
-    private String username;
+    private String id;
+    private String userId;
     private String password;
+    private String grantType;
 
     public Collection<GrantedAuthority> getAuthorities() {
         return null;
