@@ -36,10 +36,11 @@ public class JwtUtil {
     public static ApiKeys getApiKeysFromToken(String token, SecretKey secretKey) {
         // JWT  토큰 내 uuid 추출 로직
         ApiKeys apiKeys = new ApiKeys();
-        apiKeys.setApiUuid(extractClaims(token, secretKey).get("UUID").toString());
+        Claims temp = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
+        apiKeys.setApiUuid(extractClaims(token, secretKey).get("ID").toString());
         apiKeys.setApiPath(extractClaims(token, secretKey).get("API_PATH").toString());
         apiKeys.setUserId(extractClaims(token, secretKey).get("USER_ID").toString());
-        apiKeys.setExpiredTime(Timestamp.valueOf(extractClaims(token, secretKey).get("EXPIRED_TIME").toString()));
+        apiKeys.setExpiredTime(new Timestamp((new Date(Long.parseLong(extractClaims(token, secretKey).get("exp").toString()))).getTime()));
 
         return apiKeys;
     }
