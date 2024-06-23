@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rockercats.open_api.repository.OpenApiExamProductMapper">
-    <select id="selectProductList" parameterType="null" resultType="List">
+    <select id="selectProductList" resultType="ArrayList">
         SELECT * FROM PRODUCT
         LIMIT 10
     </select>

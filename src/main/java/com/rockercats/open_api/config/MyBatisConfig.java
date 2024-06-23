@@ -23,7 +23,7 @@ public class MyBatisConfig {
         sqlSessionFactoryBean.setDataSource(dataSource);
         sqlSessionFactoryBean.setConfigLocation(new PathMatchingResourcePatternResolver().getResource("mybatis/mybatis-config.xml"));
         sqlSessionFactoryBean.setTypeAliasesPackage("com.rockercats.open_api");
-        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:mapper/*.xml"));
+        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("mapper/*.xml"));
 
         return sqlSessionFactoryBean.getObject();
     }
