@@ -23,7 +23,7 @@ public class ProductController {
     private ProductService productService;
     private final BucketService bucketService;
 
-    @GetMapping("/public/products")
+    @GetMapping(value= {"/public/products", "/protected/products"})
     public ResponseEntity<List<ProductDetailResponse>> getProducts(HttpServletRequest request) {
 
         Bucket bucket = bucketService.resolveBucket(request);
