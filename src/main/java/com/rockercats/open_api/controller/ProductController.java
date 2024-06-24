@@ -37,8 +37,5 @@ public class ProductController {
 
         List<ProductDetailResponse> productDetailResponseList = productService.getProducts();
         return ResponseEntity.ok().body(productDetailResponseList);
-
-//    public ResponseEntity<String> getProducts() {
-//        return ResponseEntity.ok("Greetings from a public endpoint!");
     }
 }
