@@ -2,9 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rockercats.open_api.repository.OpenApiExamProductMapper">
-    <select id="selectProductList" resultType="ProductDetailResponse">
+    <select id="selectProductList" parameterType="ProductDetailRequest" resultType="ProductDetailResponse">
         SELECT *
         FROM PRODUCT
-        LIMIT 10
+        <where>
+            <if test="productId != null and productId != ''">
+                AND PRODUCT_ID = #{productId}
+            </if>
+            <if test="productName != null and productName != ''">
+                AND PRODUCT_NAME = #{productName}
+            </if>
+            <if test="description != null and description != ''">
+                AND DESCRIPTION = #{description}
+            </if>
+            <if test="color != null and color != ''">
+                AND COLOR = #{color}
+            </if>
+            <if test="saleStatCd != null and saleStatCd != ''">
+                AND SALE_STAT_CD = #{saleStatCd}
+            </if>
+            <if test="size != null and size != ''">
+                AND SIZE = #{size}
+            </if>
+            <if test="normalPrice != null and normalPrice != ''">
+                AND NORMAL_PRICE = #{normalPrice}
+            </if>
+            <if test="salePrice != null and salePrice != ''">
+                AND SALE_PRICE = #{salePrice}
+            </if>
+            <if test="productDesc != null and productDesc != ''">
+                AND PRODUCT_DESC = #{productDesc}
+            </if>
+            <if test="limit != null and limit != ''">
+                LIMIT #{limit}
+            </if>
+        </where>
     </select>
 </mapper>

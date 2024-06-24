@@ -12,6 +12,8 @@ public class ProductDetailRequest {
     private String color;
     private String saleStatCd;
     private String size;
-    private String normalPrice;
+    private int normalPrice;
+    private int salePrice;
     private String productDesc;
+    private int limit;
 }
