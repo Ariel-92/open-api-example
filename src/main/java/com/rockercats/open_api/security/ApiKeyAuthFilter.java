@@ -1,5 +1,6 @@
 package com.rockercats.open_api.security;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,8 +19,13 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        extractor.extract(request)
-                .ifPresent(SecurityContextHolder.getContext()::setAuthentication);
+        try{
+            extractor.extract(request)
+                    .ifPresent(SecurityContextHolder.getContext()::setAuthentication);
+        }
+        catch (JwtException exception) {
+            logger.info(exception.getMessage());
+        }
 
         filterChain.doFilter(request, response);
     }

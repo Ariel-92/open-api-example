@@ -15,6 +15,8 @@ import java.util.UUID;
 @Component
 public class JwtUtil {
 
+    private static final Logger log = LoggerFactory.getLogger(JwtUtil.class);
+
     public static String generateToken(String uuid, User user, Date expiredDate, String apiPath, SecretKey secretKey) {
         // JWT 토큰 생성 로직
         return Jwts.builder()
@@ -36,11 +38,16 @@ public class JwtUtil {
     public static ApiKeys getApiKeysFromToken(String token, SecretKey secretKey) {
         // JWT  토큰 내 uuid 추출 로직
         ApiKeys apiKeys = new ApiKeys();
-        Claims temp = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
-        apiKeys.setApiUuid(extractClaims(token, secretKey).get("ID").toString());
-        apiKeys.setApiPath(extractClaims(token, secretKey).get("API_PATH").toString());
-        apiKeys.setUserId(extractClaims(token, secretKey).get("USER_ID").toString());
-        apiKeys.setExpiredTime(new Timestamp((new Date(Long.parseLong(extractClaims(token, secretKey).get("exp").toString()))).getTime()));
+
+        try {
+            apiKeys.setApiUuid(extractClaims(token, secretKey).get("ID").toString());
+            apiKeys.setApiPath(extractClaims(token, secretKey).get("API_PATH").toString());
+            apiKeys.setUserId(extractClaims(token, secretKey).get("USER_ID").toString());
+            apiKeys.setExpiredTime(new Timestamp((new Date(Long.parseLong(extractClaims(token, secretKey).get("exp").toString()))).getTime()));
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+        }
 
         return apiKeys;
     }
