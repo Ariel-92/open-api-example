@@ -23,24 +23,8 @@ public class ProductController {
     private ProductService productService;
     private final BucketService bucketService;
 
-    @GetMapping("/public/products")
+    @GetMapping(value= {"/public/products", "/protected/products"})
     public ResponseEntity<List<ProductDetailResponse>> getProducts(HttpServletRequest request) {
-
-        Bucket bucket = bucketService.resolveBucket(request);
-        log.info("접근 IP : {}", request.getRemoteAddr());
-
-        if (bucket.tryConsume(1)) {
-            log.info("정상처리 - 잔여토큰 : " + bucket.getAvailableTokens());
-        } else {
-            log.debug("트래픽 초과 요청 거부");
-        }
-
-        List<ProductDetailResponse> productDetailResponseList = productService.getProducts();
-        return ResponseEntity.ok().body(productDetailResponseList);
-    }
-
-    @GetMapping("/protected/products")
-    public ResponseEntity<List<ProductDetailResponse>> getProtectedProducts(HttpServletRequest request) {
 
         Bucket bucket = bucketService.resolveBucket(request);
         log.info("접근 IP : {}", request.getRemoteAddr());
