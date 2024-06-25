@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.rockercats.open_api.repository.OpenApiExamProductMapper">
+<mapper namespace="com.rockercats.open_api.repository.ProductMapper">
     <select id="selectProductList" parameterType="ProductDetailRequest" resultType="ProductDetailResponse">
         SELECT *
         FROM PRODUCT
@@ -33,9 +33,41 @@
             <if test="productDesc != null and productDesc != ''">
                 AND PRODUCT_DESC = #{productDesc}
             </if>
-            <if test="limit != null and limit != ''">
+        </where>
+        <choose>
+            <when test="limit != null and limit != ''">
                 LIMIT #{limit}
+            </when>
+            <otherwise>
+                LIMIT 20
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectProductReviewList" parameterType="ProductReviewRequest" resultType="ProductReviewResponse">
+        SELECT *
+        FROM PRODUCT_REVIEW
+        <where>
+            <if test="reviewId != null and reviewId != ''">
+                AND REVIEW_ID = #{reviewId}
+            </if>
+            <if test="productId != null and productId != ''">
+                AND PRODUCT_ID = #{productId}
+            </if>
+            <if test="reviewText != null and reviewText != ''">
+                AND REVIEW_TEXT = #{reviewText}
+            </if>
+            <if test="reviewScore != null and reviewScore != ''">
+                AND REVIEW_SCORE = #{reviewScore}
             </if>
         </where>
+        <choose>
+            <when test="limit != null and limit != ''">
+                LIMIT #{limit}
+            </when>
+            <otherwise>
+                LIMIT 20
+            </otherwise>
+        </choose>
     </select>
 </mapper>
