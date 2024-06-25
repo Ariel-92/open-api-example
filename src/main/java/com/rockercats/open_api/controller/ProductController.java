@@ -2,6 +2,8 @@ package com.rockercats.open_api.controller;
 
 import com.rockercats.open_api.model.product.ProductDetailRequest;
 import com.rockercats.open_api.model.product.ProductDetailResponse;
+import com.rockercats.open_api.model.product.ProductReviewRequest;
+import com.rockercats.open_api.model.product.ProductReviewResponse;
 import com.rockercats.open_api.service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +25,11 @@ public class ProductController {
     public ResponseEntity<List<ProductDetailResponse>> getProducts(@RequestBody(required = false) ProductDetailRequest productDetailRequest,
                                                                    HttpServletRequest request) {
         return productService.getProducts(productDetailRequest, request);
+    }
+
+    @GetMapping(value= {"/public/review", "/protected/review"})
+    public ResponseEntity<List<ProductReviewResponse>> getReview(@RequestBody(required = false) ProductReviewRequest productReviewRequest,
+                                                                 HttpServletRequest request) {
+        return productService.getReview(productReviewRequest, request);
     }
 }
