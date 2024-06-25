@@ -1,7 +1,7 @@
 package com.rockercats.open_api.global;
 
 import com.rockercats.open_api.entity.ApiKeys;
-import com.rockercats.open_api.model.User;
+import com.rockercats.open_api.entity.User;
 import com.rockercats.open_api.service.auth.UserService;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.FilterChain;

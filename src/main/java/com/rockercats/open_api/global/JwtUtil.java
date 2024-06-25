@@ -1,7 +1,7 @@
 package com.rockercats.open_api.global;
 
 import com.rockercats.open_api.entity.ApiKeys;
-import com.rockercats.open_api.model.User;
+import com.rockercats.open_api.entity.User;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.UUID;
 
 @Component
 public class JwtUtil {
@@ -50,6 +49,23 @@ public class JwtUtil {
         }
 
         return apiKeys;
+    }
+
+    public static String generateLoginToken(String uuid, User user, Date expiredDate, SecretKey secretKey) {
+        // JWT 토큰 생성 로직
+        return Jwts.builder()
+                .header()
+                .add("typ", "JWT")
+                .and()
+                .subject("OPEN_API_EXAMPLE")
+                .expiration(expiredDate)
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .id(uuid)
+                .claim("ID", uuid)
+                .claim("USER_ID", user.getUserId())
+                .claim("GRANT_TYPE", user.getGrantType())
+                .signWith(secretKey)
+                .compact();
     }
 
     public static boolean validateToken(String token, SecretKey secretKey) {

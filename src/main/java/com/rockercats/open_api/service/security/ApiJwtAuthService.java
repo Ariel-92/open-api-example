@@ -2,7 +2,7 @@ package com.rockercats.open_api.service.security;
 
 import com.rockercats.open_api.entity.ApiKeys;
 import com.rockercats.open_api.global.JwtUtil;
-import com.rockercats.open_api.model.User;
+import com.rockercats.open_api.entity.User;
 import com.rockercats.open_api.repository.OpenApiExamApiKeysMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

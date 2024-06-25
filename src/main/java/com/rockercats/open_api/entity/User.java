@@ -1,4 +1,4 @@
-package com.rockercats.open_api.model;
+package com.rockercats.open_api.entity;
 
 import lombok.Getter;
 import lombok.Setter;

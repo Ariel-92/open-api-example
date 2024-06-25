@@ -28,6 +28,7 @@ public class SecurityConfiguration {
                 .securityMatcher("/**")
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/public/**")).permitAll()
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/login")).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
