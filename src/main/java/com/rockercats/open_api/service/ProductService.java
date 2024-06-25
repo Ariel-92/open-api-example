@@ -2,7 +2,7 @@ package com.rockercats.open_api.service;
 
 import com.rockercats.open_api.model.product.ProductDetailRequest;
 import com.rockercats.open_api.model.product.ProductDetailResponse;
-import com.rockercats.open_api.repository.OpenApiExamProductMapper;
+import com.rockercats.open_api.repository.ProductMapper;
 import io.github.bucket4j.Bucket;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class ProductService {
-    private final OpenApiExamProductMapper openApiExamProductMapper;
+    private final ProductMapper productMapper;
     private final BucketService bucketService;
 
     public ResponseEntity<List<ProductDetailResponse>> getProducts(ProductDetailRequest productDetailRequest, HttpServletRequest request) {
@@ -25,7 +25,7 @@ public class ProductService {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
         }
 
-        List<ProductDetailResponse> productDetailResponseList = openApiExamProductMapper.selectProductList(productDetailRequest);
+        List<ProductDetailResponse> productDetailResponseList = productMapper.selectProductList(productDetailRequest);
         return ResponseEntity.ok().body(productDetailResponseList);
     }
 }
