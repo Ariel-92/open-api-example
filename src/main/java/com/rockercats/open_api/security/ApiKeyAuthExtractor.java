@@ -58,7 +58,7 @@ public class ApiKeyAuthExtractor {
             }
 
             // 유효기간 검사
-            if(apiKeys.getExpiredTime().compareTo(new Timestamp(System.currentTimeMillis())) < 0) {
+            if(apiKeys.getExpiredTime().compareTo(new Timestamp(System.currentTimeMillis())) > 0) {
                 return Optional.empty();
             }
 
