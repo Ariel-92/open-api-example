@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rockercats.open_api.repository.UserAccessLogControlMapper">
+    <insert id="insertUserAccessLog" parameterType="com.rockercats.open_api.model.user.UserAccessControlRequest">
+        INSERT INTO USER_ACCESS_CONTROL_LOG
+        (USER_ID, REG_DTM, API_PATH, USER_ACCESS_CNT, DATA_VIEW_CNT)
+        VALUES
+        (#{userId}, NOW(), #{apiPath}, #{userAccessCnt}, #{dataViewCnt})
+    </insert>
+
+    <select id="selectUserAccessLog" parameterType="com.rockercats.open_api.model.user.UserAccessControlRequest" resultType="Integer">
+        SELECT COUNT(1)
+        FROM USER_ACCESS_CONTROL_LOG
+        <where>
+            <if test="userId != null and userId != ''">
+                AND USER_ID = #{userId}
+            </if>
+            <if test="apiPath != null and apiPath != ''">
+                AND API_PATH = #{apiPath}
+            </if>
+            AND DATE(REG_DTM) = current_date
+        </where>
+    </select>
+</mapper>
