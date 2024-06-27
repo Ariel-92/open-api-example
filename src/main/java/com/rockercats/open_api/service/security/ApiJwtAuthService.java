@@ -46,7 +46,7 @@ public class ApiJwtAuthService {
         user.setUserId("user1");
         user.setId("ff366fdb-1a60-4efc-8be9-f05d4b01b969");
         user.setPassword("");
-        user.setGrantType("A");
+        user.setRole("USER");
 
         ApiKeys apiKeys = new ApiKeys();
         apiKeys.setApiUuid(uuid);

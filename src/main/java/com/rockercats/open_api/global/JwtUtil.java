@@ -29,7 +29,7 @@ public class JwtUtil {
                 .claim("ID", uuid)
                 .claim("USER_ID", user.getUserId())
                 .claim("API_PATH", apiPath)
-                .claim("GRANT_TYPE", user.getGrantType())
+                .claim("ROLE", user.getRole())
                 .signWith(secretKey)
                 .compact();
     }
@@ -63,7 +63,7 @@ public class JwtUtil {
                 .id(uuid)
                 .claim("ID", uuid)
                 .claim("USER_ID", user.getUserId())
-                .claim("GRANT_TYPE", user.getGrantType())
+                .claim("ROLE", user.getRole())
                 .signWith(secretKey)
                 .compact();
     }
