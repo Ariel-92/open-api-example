@@ -3,6 +3,8 @@ package com.rockercats.open_api.service;
 import com.rockercats.open_api.dto.request.LogInRequestDto;
 import com.rockercats.open_api.dto.response.LogInResponseDto;
 import com.rockercats.open_api.entity.User;
+import com.rockercats.open_api.exception.CustomException;
+import com.rockercats.open_api.exception.MemberErrorCode;
 import com.rockercats.open_api.global.JwtUtil;
 import com.rockercats.open_api.repository.UserMapper;
 import jakarta.annotation.PostConstruct;
@@ -35,11 +37,11 @@ public class LoginService {
         this.secretKey = new SecretKeySpec(Base64.getEncoder().encode(accessSecretKey.getBytes()), "HmacSHA256");
     }
 
-    public LogInResponseDto login(LogInRequestDto loginRequestDto) throws Throwable {
+    public LogInResponseDto login(LogInRequestDto loginRequestDto) throws CustomException {
         User userInfo = examUserMapper.getUserById(loginRequestDto.getUserId());
 
         if(!userInfo.getPassword().equals(loginRequestDto.getPassword())) {
-            throw new RuntimeException("incorrect password");
+            throw MemberErrorCode.MEMBER_NOT_FOUND.defaultException();
         }
 
         String uuid = UUID.randomUUID().toString();

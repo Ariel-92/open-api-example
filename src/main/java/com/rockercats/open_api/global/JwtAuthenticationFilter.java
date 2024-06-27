@@ -27,7 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private UserService userService;
 
     private JwtUtil jwtUtil;
-    @Value("${jwt.api.secret-key:asaas}")
+    @Value("${jwt.api.secret-key}")
     private String accessSecretKey;
 
     private SecretKey secretKey;
