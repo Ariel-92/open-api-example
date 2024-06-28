@@ -9,6 +9,8 @@ import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.rockercats.open_api.constants.Constants;
+
 @Service
 public class BucketService {
     private final Map<String, Bucket> cache = new ConcurrentHashMap<>();
@@ -19,8 +21,8 @@ public class BucketService {
 
     private Bucket newBucket(String apiKey) {
         return Bucket.builder()
-                // IP당 일 조회가능횟수 500회 제한
-                .addLimit(Bandwidth.classic(500, Refill.greedy(500, Duration.ofDays(1))))
+                // IP당 일 조회가능횟수 제한
+                .addLimit(Bandwidth.classic(Constants.IP_DAILY_ACCESS_LIMIT, Refill.greedy(500, Duration.ofDays(1))))
                 .build();
     }
 }
