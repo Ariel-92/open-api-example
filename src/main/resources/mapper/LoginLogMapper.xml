@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rockercats.open_api.repository.LoginLogMapper">
+    <insert id="insertLoginLog" parameterType="com.rockercats.open_api.entity.LoginLog">
+        INSERT INTO LOGIN_LOG(ID, USER_ID, ACCESS_TIME, EXPIRED_TIME, REFRESH_TOKEN)
+        VALUES
+        (
+            #{id},
+            #{userId},
+            #{accessTime},
+            #{expiredTime},
+            #{refreshToken}
+        )
+    </insert>
+
+    <select id="getLoginLogByUuid" resultType="com.rockercats.open_api.entity.LoginLog" parameterType="String">
+        SELECT ID, USER_ID, ACCESS_TIME, EXPIRED_TIME, REFRESH_TOKEN
+        FROM LOGIN_LOG
+        WHERE ID = #{id}
+    </select>
+</mapper>

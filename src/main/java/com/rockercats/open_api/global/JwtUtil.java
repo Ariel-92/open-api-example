@@ -1,6 +1,7 @@
 package com.rockercats.open_api.global;
 
 import com.rockercats.open_api.entity.ApiKeys;
+import com.rockercats.open_api.entity.LoginLog;
 import com.rockercats.open_api.entity.User;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
@@ -68,6 +69,24 @@ public class JwtUtil {
                 .compact();
     }
 
+    public static LoginLog getUserAuthFromToken(String token, SecretKey secretKey) {
+        // JWT  토큰 내 uuid 추출 로직
+        LoginLog loginLog = new LoginLog();
+
+        try {
+            loginLog.setId(extractClaims(token, secretKey).get("ID").toString());
+            loginLog.setUserId(extractClaims(token, secretKey).get("USER_ID").toString());
+            loginLog.setAccessTime(new Timestamp((new Date(Long.parseLong(extractClaims(token, secretKey).get("iat").toString()))).getTime()));
+            loginLog.setExpiredTime(new Timestamp((new Date(Long.parseLong(extractClaims(token, secretKey).get("exp").toString()))).getTime()));
+            loginLog.setRefreshToken(extractClaims(token, secretKey).get("REFRESH_TOKEN").toString());
+            loginLog.setRole(extractClaims(token, secretKey).get("ROLE").toString());
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        return loginLog;
+    }
     public static boolean validateToken(String token, SecretKey secretKey) {
         Logger log = LoggerFactory.getLogger(JwtUtil.class);
         // JWT 토큰 유효성 검증 로직
