@@ -7,6 +7,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.rockercats.open_api.global.JwtUtil;
@@ -56,6 +57,11 @@ public class UserAccessService {
             userAccessControlRequest.setUserId(apiKeys.getUserId());
             userAccessControlRequest.setApiPath(apiKeys.getApiPath());
             result = userAccessLogControlMapper.selectUserAccessLog(userAccessControlRequest);
+
+            // result > 유저의 일일 접근제한회수인 경우
+            if (result > 100) { // temp
+                return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
