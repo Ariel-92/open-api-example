@@ -19,7 +19,7 @@ public class BucketController {
 
     @GetMapping("/public/bucket")
     public ResponseEntity<String> bucketAccess(HttpServletRequest request) {
-        Bucket bucket = bucketService.resolveBucket(request);
+        Bucket bucket = bucketService.resolveBucket();
         log.info("접근 IP : {}", request.getRemoteAddr());
 
         if (bucket.tryConsume(1)) {

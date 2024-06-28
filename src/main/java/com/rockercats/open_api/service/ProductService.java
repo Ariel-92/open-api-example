@@ -22,7 +22,7 @@ public class ProductService {
     private final UserAccessService userAccessService;
 
     public ResponseEntity<List<ProductDetailResponse>> getProducts(ProductDetailRequest productDetailRequest, HttpServletRequest request) {
-        Bucket bucket = bucketService.resolveBucket(request);
+        Bucket bucket = bucketService.resolveBucket();
 
         if (!bucket.tryConsume(1)) {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
@@ -43,7 +43,7 @@ public class ProductService {
     }
 
     public ResponseEntity<List<ProductReviewResponse>> getReview(ProductReviewRequest productReviewRequest, HttpServletRequest request) {
-        Bucket bucket = bucketService.resolveBucket(request);
+        Bucket bucket = bucketService.resolveBucket();
 
         if (!bucket.tryConsume(1)) {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
