@@ -19,24 +19,45 @@ import java.util.List;
 public class ProductService {
     private final ProductMapper productMapper;
     private final BucketService bucketService;
+    private final UserAccessService userAccessService;
 
     public ResponseEntity<List<ProductDetailResponse>> getProducts(ProductDetailRequest productDetailRequest, HttpServletRequest request) {
-        Bucket bucket = bucketService.resolveBucket(request);
+        Bucket bucket = bucketService.resolveBucket();
 
         if (!bucket.tryConsume(1)) {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
         }
+
+        ResponseEntity<Integer> userAccessCount = userAccessService.getUserAccessLog(request);
+
+        // 유저별 일 접근회수제한 이상 접근시 429 에러 반환
+        if (userAccessCount.getStatusCode() == HttpStatus.TOO_MANY_REQUESTS) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
+        }
+
+        // 유저 접근 로그 저장
+        userAccessService.insertUserAccessLog(request);
 
         List<ProductDetailResponse> productDetailResponseList = productMapper.selectProductList(productDetailRequest);
         return ResponseEntity.ok().body(productDetailResponseList);
     }
 
     public ResponseEntity<List<ProductReviewResponse>> getReview(ProductReviewRequest productReviewRequest, HttpServletRequest request) {
-        Bucket bucket = bucketService.resolveBucket(request);
+        Bucket bucket = bucketService.resolveBucket();
 
         if (!bucket.tryConsume(1)) {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
         }
+
+        ResponseEntity<Integer> userAccessCount = userAccessService.getUserAccessLog(request);
+
+        // 유저별 일 접근회수제한 이상 접근시 429 에러 반환
+        if (userAccessCount.getStatusCode() == HttpStatus.TOO_MANY_REQUESTS) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
+        }
+
+        // 유저 접근 로그 저장
+        userAccessService.insertUserAccessLog(request);
 
         List<ProductReviewResponse> productReviewResponseList = productMapper.selectProductReviewList(productReviewRequest);
         return ResponseEntity.ok().body(productReviewResponseList);
