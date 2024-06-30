@@ -47,12 +47,11 @@ public class ApiKeyAuthExtractor {
             ApiKeys compareKeyInfo = apiJwtAuthService.getApiKeyInfo(apiKeys.getApiUuid());
 
             // 정합성 검사
-            if(providedKey == null &&
-                    uri.equals(apiKeys.getApiPath()) &&
-                    !apiKeys.getApiUuid().equals(compareKeyInfo.getApiUuid()) &&
+            if(providedKey == null ||
+                    !(uri.equals(apiKeys.getApiPath()) &&
+                    apiKeys.getApiUuid().equals(compareKeyInfo.getApiUuid()) &&
                     apiKeys.getApiPath().equals(compareKeyInfo.getApiPath()) &&
-                    apiKeys.getUserId().equals(compareKeyInfo.getApiPath()) &&
-                    apiKeys.getExpiredTime().equals(compareKeyInfo.getExpiredTime())
+                    apiKeys.getUserId().equals(compareKeyInfo.getUserId()))
             ) {
                 return Optional.empty();
             }
