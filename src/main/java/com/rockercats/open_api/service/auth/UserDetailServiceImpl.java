@@ -3,7 +3,6 @@ package com.rockercats.open_api.service.auth;
 import com.rockercats.open_api.entity.User;
 import com.rockercats.open_api.repository.UserMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
