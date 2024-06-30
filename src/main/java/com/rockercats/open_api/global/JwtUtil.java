@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Component
@@ -52,7 +53,7 @@ public class JwtUtil {
         return apiKeys;
     }
 
-    public static String generateLoginToken(String uuid, User user, Date expiredDate, SecretKey secretKey) {
+    public static String generateLoginToken(String uuid, User user, Date accessDate, Date expiredDate, SecretKey secretKey) {
         // JWT 토큰 생성 로직
         return Jwts.builder()
                 .header()
@@ -60,7 +61,7 @@ public class JwtUtil {
                 .and()
                 .subject("OPEN_API_EXAMPLE")
                 .expiration(expiredDate)
-                .issuedAt(new Date(System.currentTimeMillis()))
+                .issuedAt(accessDate)
                 .id(uuid)
                 .claim("ID", uuid)
                 .claim("USER_ID", user.getUserId())
@@ -74,12 +75,12 @@ public class JwtUtil {
         LoginLog loginLog = new LoginLog();
 
         try {
-            loginLog.setId(extractClaims(token, secretKey).get("ID").toString());
-            loginLog.setUserId(extractClaims(token, secretKey).get("USER_ID").toString());
-            loginLog.setAccessTime(new Timestamp((new Date(Long.parseLong(extractClaims(token, secretKey).get("iat").toString()))).getTime()));
-            loginLog.setExpiredTime(new Timestamp((new Date(Long.parseLong(extractClaims(token, secretKey).get("exp").toString()))).getTime()));
-            loginLog.setRefreshToken(extractClaims(token, secretKey).get("REFRESH_TOKEN").toString());
-            loginLog.setRole(extractClaims(token, secretKey).get("ROLE").toString());
+            Claims claims = extractClaims(token, secretKey);
+            loginLog.setId(claims.get("ID").toString());
+            loginLog.setUserId(claims.get("USER_ID").toString());
+            loginLog.setAccessTime(new Timestamp(claims.getIssuedAt().getTime()));
+            loginLog.setExpiredTime(new Timestamp(claims.getExpiration().getTime()));
+            loginLog.setRole(claims.get("ROLE").toString());
         }
         catch (Exception e) {
             log.error(e.getMessage());

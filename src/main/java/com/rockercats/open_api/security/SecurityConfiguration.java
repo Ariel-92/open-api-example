@@ -1,11 +1,16 @@
 package com.rockercats.open_api.security;
 
+import com.rockercats.open_api.entity.User;
+import com.rockercats.open_api.security.member.UserAuthExtractor;
+import com.rockercats.open_api.security.member.UserAuthFilter;
 import com.rockercats.open_api.service.auth.UserDetailServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,14 +20,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
     private final ApiKeyAuthFilter authFilter;
+    private final UserAuthFilter userAuthFilter;
     private final PasswordEncoder passwordEncoder;
     private UserDetailServiceImpl userDetailService;
+    private final ObjectPostProcessor<Object> objectPostProcessor;
+    private final UserAuthExtractor userAuthExtractor;
 
     @Autowired
     public void setUserDetailService(UserDetailServiceImpl userDetailService) {
@@ -35,17 +45,20 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    @Order(1)
+    @Order(3)
     public SecurityFilterChain publicSecurityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(AbstractHttpConfigurer::disable)
-                .securityMatcher("/public")
+                .securityMatcher(antMatcher("/**"))
                 .authorizeHttpRequests(registry -> registry
-                        .anyRequest().hasAuthority("ROLE_USER")
+                        .anyRequest().hasAnyRole("USER")
                 )
+                .addFilterBefore(userAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling((exceptionHandling) -> exceptionHandling
+                        .authenticationEntryPoint((request, response, authException) -> response.setStatus(401)))
                 .build();
     }
 
@@ -65,14 +78,14 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    @Order(3)
+    @Order(1)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(AbstractHttpConfigurer::disable)
-                .securityMatcher("/**")
+                .securityMatcher("/protected/**")
                 .authorizeHttpRequests(registry -> registry
                         .anyRequest().authenticated()
                 )
