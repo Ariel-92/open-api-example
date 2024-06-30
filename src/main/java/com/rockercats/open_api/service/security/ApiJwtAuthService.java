@@ -6,6 +6,7 @@ import com.rockercats.open_api.global.JwtUtil;
 import com.rockercats.open_api.entity.User;
 import com.rockercats.open_api.repository.LoginLogMapper;
 import com.rockercats.open_api.repository.OpenApiExamApiKeysMapper;
+import com.rockercats.open_api.repository.UserMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,23 +46,20 @@ public class ApiJwtAuthService {
         return loginLogMapper.getLoginLogByUuid(uuid);
     }
 
-    public String generateApiKey(String apiPath) {
+    public String generateApiKey(String apiPath, String userAuth) {
+        LoginLog loginInfo = JwtUtil.getUserAuthFromToken(userAuth, secretKey);
+
         String uuid = UUID.randomUUID().toString();
         long tokenValidMiliseconds = 1000L * Long.parseLong(tokenTime);
         Date expiredDate = new Date(System.currentTimeMillis() + tokenValidMiliseconds);
-        User user = new User();
-        user.setUserId("user1");
-        user.setId("ff366fdb-1a60-4efc-8be9-f05d4b01b969");
-        user.setPassword("");
-        user.setRole("USER");
 
         ApiKeys apiKeys = new ApiKeys();
         apiKeys.setApiUuid(uuid);
-        apiKeys.setUserId("user1");
+        apiKeys.setUserId(loginInfo.getUserId());
         apiKeys.setExpiredTime(new Timestamp(expiredDate.getTime()));
         apiKeys.setApiPath(apiPath);
         apiKeysMapper.addApiKey(apiKeys);
 
-        return JwtUtil.generateToken(uuid, user, expiredDate, apiPath, secretKey);
+        return JwtUtil.generateToken(uuid, loginInfo.getUserId(), expiredDate, apiPath, secretKey);
     }
 }

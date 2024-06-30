@@ -52,7 +52,8 @@ public class SecurityConfiguration {
                 )
                 .addFilterBefore(userAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling((exceptionHandling) -> exceptionHandling
-                        .authenticationEntryPoint((request, response, authException) -> response.setStatus(401)))
+                        .authenticationEntryPoint((request, response, authException) -> response.setStatus(401))
+                )
                 .build();
     }
 

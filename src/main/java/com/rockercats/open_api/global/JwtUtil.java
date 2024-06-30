@@ -17,7 +17,7 @@ public class JwtUtil {
 
     private static final Logger log = LoggerFactory.getLogger(JwtUtil.class);
 
-    public static String generateToken(String uuid, User user, Date expiredDate, String apiPath, SecretKey secretKey) {
+    public static String generateToken(String uuid, String userId, Date expiredDate, String apiPath, SecretKey secretKey) {
         // JWT 토큰 생성 로직
         return Jwts.builder()
                 .header()
@@ -28,9 +28,8 @@ public class JwtUtil {
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .id(uuid)
                 .claim("ID", uuid)
-                .claim("USER_ID", user.getUserId())
+                .claim("USER_ID", userId)
                 .claim("API_PATH", apiPath)
-                .claim("ROLE", user.getRole())
                 .signWith(secretKey)
                 .compact();
     }
