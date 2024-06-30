@@ -6,7 +6,6 @@ import com.rockercats.open_api.global.JwtUtil;
 import com.rockercats.open_api.entity.User;
 import com.rockercats.open_api.repository.LoginLogMapper;
 import com.rockercats.open_api.repository.OpenApiExamApiKeysMapper;
-import com.rockercats.open_api.repository.UserMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
