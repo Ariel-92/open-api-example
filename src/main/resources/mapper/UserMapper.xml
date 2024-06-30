@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rockercats.open_api.repository.UserMapper">
+    <select id="getUserById" parameterType="String" resultType="com.rockercats.open_api.entity.User">
+        SELECT  USER_ID, PASSWORD, ROLE
+        FROM    USERS
+        WHERE   USER_ID = #{userId}
+    </select>
+</mapper>

@@ -1,9 +1,12 @@
 package com.rockercats.open_api.service.security;
 
 import com.rockercats.open_api.entity.ApiKeys;
+import com.rockercats.open_api.entity.LoginLog;
 import com.rockercats.open_api.global.JwtUtil;
-import com.rockercats.open_api.model.User;
+import com.rockercats.open_api.entity.User;
+import com.rockercats.open_api.repository.LoginLogMapper;
 import com.rockercats.open_api.repository.OpenApiExamApiKeysMapper;
+import com.rockercats.open_api.repository.UserMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +31,7 @@ public class ApiJwtAuthService {
     private SecretKey secretKey;
 
     private final OpenApiExamApiKeysMapper apiKeysMapper;
+    private final LoginLogMapper loginLogMapper;
 
     @PostConstruct
     protected void init() {
@@ -38,6 +42,10 @@ public class ApiJwtAuthService {
         return apiKeysMapper.getApiKeys(uuid);
     }
 
+    public LoginLog getUserAuthInfo(String uuid) {
+        return loginLogMapper.getLoginLogByUuid(uuid);
+    }
+
     public String generateApiKey(String apiPath) {
         String uuid = UUID.randomUUID().toString();
         long tokenValidMiliseconds = 1000L * Long.parseLong(tokenTime);
@@ -46,7 +54,7 @@ public class ApiJwtAuthService {
         user.setUserId("user1");
         user.setId("ff366fdb-1a60-4efc-8be9-f05d4b01b969");
         user.setPassword("");
-        user.setGrantType("A");
+        user.setRole("USER");
 
         ApiKeys apiKeys = new ApiKeys();
         apiKeys.setApiUuid(uuid);

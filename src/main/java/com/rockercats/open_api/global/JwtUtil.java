@@ -1,7 +1,8 @@
 package com.rockercats.open_api.global;
 
 import com.rockercats.open_api.entity.ApiKeys;
-import com.rockercats.open_api.model.User;
+import com.rockercats.open_api.entity.LoginLog;
+import com.rockercats.open_api.entity.User;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 @Component
 public class JwtUtil {
@@ -30,7 +31,7 @@ public class JwtUtil {
                 .claim("ID", uuid)
                 .claim("USER_ID", user.getUserId())
                 .claim("API_PATH", apiPath)
-                .claim("GRANT_TYPE", user.getGrantType())
+                .claim("ROLE", user.getRole())
                 .signWith(secretKey)
                 .compact();
     }
@@ -52,6 +53,41 @@ public class JwtUtil {
         return apiKeys;
     }
 
+    public static String generateLoginToken(String uuid, User user, Date accessDate, Date expiredDate, SecretKey secretKey) {
+        // JWT 토큰 생성 로직
+        return Jwts.builder()
+                .header()
+                .add("typ", "JWT")
+                .and()
+                .subject("OPEN_API_EXAMPLE")
+                .expiration(expiredDate)
+                .issuedAt(accessDate)
+                .id(uuid)
+                .claim("ID", uuid)
+                .claim("USER_ID", user.getUserId())
+                .claim("ROLE", user.getRole())
+                .signWith(secretKey)
+                .compact();
+    }
+
+    public static LoginLog getUserAuthFromToken(String token, SecretKey secretKey) {
+        // JWT  토큰 내 uuid 추출 로직
+        LoginLog loginLog = new LoginLog();
+
+        try {
+            Claims claims = extractClaims(token, secretKey);
+            loginLog.setId(claims.get("ID").toString());
+            loginLog.setUserId(claims.get("USER_ID").toString());
+            loginLog.setAccessTime(new Timestamp(claims.getIssuedAt().getTime()));
+            loginLog.setExpiredTime(new Timestamp(claims.getExpiration().getTime()));
+            loginLog.setRole(claims.get("ROLE").toString());
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        return loginLog;
+    }
     public static boolean validateToken(String token, SecretKey secretKey) {
         Logger log = LoggerFactory.getLogger(JwtUtil.class);
         // JWT 토큰 유효성 검증 로직
