@@ -21,15 +21,25 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
-    @GetMapping(value= {"/public/products", "/protected/products"})
-    public ResponseEntity<List<ProductDetailResponse>> getProducts(@RequestBody(required = false) ProductDetailRequest productDetailRequest,
-                                                                   HttpServletRequest request) {
-        return productService.getProducts(productDetailRequest, request);
+    @GetMapping(value= {"/public/products"})
+    public ResponseEntity<List<ProductDetailResponse>> getProducts(@RequestBody(required = false) ProductDetailRequest productDetailRequest) {
+        return productService.getProducts(productDetailRequest);
     }
 
-    @GetMapping(value= {"/public/review", "/protected/review"})
-    public ResponseEntity<List<ProductReviewResponse>> getReview(@RequestBody(required = false) ProductReviewRequest productReviewRequest,
+    @GetMapping(value= {"/protected/products"})
+    public ResponseEntity<List<ProductDetailResponse>> getProtectedProducts(@RequestBody(required = false) ProductDetailRequest productDetailRequest,
+                                                                   HttpServletRequest request) {
+        return productService.getProtectedProducts(productDetailRequest, request);
+    }
+
+    @GetMapping(value= {"/public/review"})
+    public ResponseEntity<List<ProductReviewResponse>> getReview(@RequestBody(required = false) ProductReviewRequest productReviewRequest) {
+        return productService.getReview(productReviewRequest);
+    }
+
+    @GetMapping(value= {"/protected/review"})
+    public ResponseEntity<List<ProductReviewResponse>> getProtectedReview(@RequestBody(required = false) ProductReviewRequest productReviewRequest,
                                                                  HttpServletRequest request) {
-        return productService.getReview(productReviewRequest, request);
+        return productService.getProtectedReview(productReviewRequest, request);
     }
 }

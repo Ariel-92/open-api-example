@@ -49,7 +49,7 @@ public class UserAccessService {
     }
 
     public ResponseEntity<Integer> getUserAccessLog (HttpServletRequest request) {
-        String authHeader = request.getHeader("apiKey");
+        String authHeader = request.getHeader("ApiKey");
         ApiKeys apiKeys = JwtUtil.getApiKeysFromToken(authHeader, secretKey);
 
         int result = 0;
