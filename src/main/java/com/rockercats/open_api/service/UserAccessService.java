@@ -1,5 +1,6 @@
 package com.rockercats.open_api.service;
 
+import com.rockercats.open_api.constants.Constants;
 import com.rockercats.open_api.entity.ApiKeys;
 import com.rockercats.open_api.model.user.UserAccessControlRequest;
 import com.rockercats.open_api.repository.UserAccessLogControlMapper;
@@ -59,7 +60,7 @@ public class UserAccessService {
             result = userAccessLogControlMapper.selectUserAccessLog(userAccessControlRequest);
 
             // result > 유저의 일일 접근제한회수인 경우
-            if (result > 100) { // temp
+            if (result > Constants.USER_DAILY_ACCESS_LIMIT) { // temp
                 return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
             }
         } catch (Exception e) {
