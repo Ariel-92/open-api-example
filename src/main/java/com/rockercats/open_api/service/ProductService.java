@@ -21,7 +21,12 @@ public class ProductService {
     private final BucketService bucketService;
     private final UserAccessService userAccessService;
 
-    public ResponseEntity<List<ProductDetailResponse>> getProducts(ProductDetailRequest productDetailRequest, HttpServletRequest request) {
+    public ResponseEntity<List<ProductDetailResponse>> getProducts(ProductDetailRequest productDetailRequest) {
+        List<ProductDetailResponse> productDetailResponseList = productMapper.selectProductList(productDetailRequest);
+        return ResponseEntity.ok().body(productDetailResponseList);
+    }
+
+    public ResponseEntity<List<ProductDetailResponse>> getProtectedProducts(ProductDetailRequest productDetailRequest, HttpServletRequest request) {
         Bucket bucket = bucketService.resolveBucket();
 
         if (!bucket.tryConsume(1)) {
@@ -42,7 +47,12 @@ public class ProductService {
         return ResponseEntity.ok().body(productDetailResponseList);
     }
 
-    public ResponseEntity<List<ProductReviewResponse>> getReview(ProductReviewRequest productReviewRequest, HttpServletRequest request) {
+    public ResponseEntity<List<ProductReviewResponse>> getReview(ProductReviewRequest productReviewRequest) {
+        List<ProductReviewResponse> productReviewResponseList = productMapper.selectProductReviewList(productReviewRequest);
+        return ResponseEntity.ok().body(productReviewResponseList);
+    }
+
+    public ResponseEntity<List<ProductReviewResponse>> getProtectedReview(ProductReviewRequest productReviewRequest, HttpServletRequest request) {
         Bucket bucket = bucketService.resolveBucket();
 
         if (!bucket.tryConsume(1)) {
